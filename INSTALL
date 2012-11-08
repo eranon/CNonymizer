@@ -1,0 +1,18 @@
+CNonymizer
+
+A short compilation howto.
+
+Prerequisits:
+	The boost library. CNonymizer is tested under Linux and Windows
+	with library version 1.49. Later versions should do the job too.
+
+	http://www.boost.org/users/history/version_1_49_0.html
+
+Compilation requires the following steps:
+	autoreconf --install
+	./configure
+	make
+
+The binary will be in the src/ subdirectory. For the installation
+you will need root privileges. Anything else is done with:
+	make install
