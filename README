@@ -1,0 +1,54 @@
+CNonymizer
+
+When working with data from third parties you may sometimes wish to store
+them on your own devices or you need "dummy" data for a presentation.
+With a short text or a simple screenshot this is easy. But what if your
+work rely on a big amount of data like a database dump?
+
+This is where CNonymizer can help you with the folowing features:
+
+Word Replacements:
+	cnonymizer -t secret.txt -o anondata/ -c replacements.ini
+	
+	In replacements.ini a list of words to replace is given to CNonymizer.
+	The form is word=replace one per line. In addition regular expressions
+	are supported e.g.: room([0-9]+)=balloon$1. The $1 in the replacement
+	will be the same number as in the word before.
+	
+IP, MAC and Switch Port Tampering
+	cnonymizer -t secret.txt -o anondata/ -i -m -s
+	
+	This scenario creates a pseudo random number mapping and replaces IPs,
+	MAC-Addresses and Switch Ports (in the form Fa0/1 as Cisco uses them).
+	
+	Important! Each number will have a fixed counterpart. So if IP-Addresses
+	are used as keys in a database dump the relations will still work, which
+	is very usefull in some test scenarios.
+	
+Computer name tampering
+	cnonymizer -t secret.txt -o anondata/ -n
+	
+	This case is based on the observation, that enterprises often uses IDs
+	in the form "000000012345" for their client systems. These IDs can
+	also be tampered by CNonymizer, but will surely not fit in every case.
+	
+Special Case: Very long lines in a file
+	cnonymizer -t secret.txt -o anondata/ -a -d ,
+	
+	If the data is stored in a format that uses very long lines, this can
+	slow down CNonymizer. For this case you can use the -d parameter to
+	define a different separator for data segments. By default this is the
+	newline character.
+	
+The anonymization in each case works fast and uses minimal memory resources.
+
+This software is in a very early developement state. Please report any
+bugs you may encounter and ask if you have questions. This will help me
+to improve CNonymizer.
+
+Finally a WARNING:
+This software is NOT using cryptographic methods it simply destroys clear
+relations between the anonymized and the original data. CNonymizer cannot
+ensure the absolute impossibility of data reconstruction.
+
+Secret data should be kept secret!
