@@ -74,8 +74,7 @@ void CNonymizer::setup(int argc, char **argv)
 
 	if(run)
 	{
-		//(!config.count("config")) &&
-		if((!config.count("target")) && (!config.count("output")))
+		if((!config.count("target")) || (!config.count("output")))
 		{
 			std::cout << cmdlineOptions << std::endl;
 			run = false;
@@ -181,7 +180,7 @@ void CNonymizer::processDir(fs::path dir)
 		}
 		else
 		{
-			std::cout<<"FIL: "<<i->string().c_str()<<std::endl;
+			std::cout<<"FILE: "<<i->string().c_str()<<std::endl;
 			processFile(*i);
 		}
 	}
@@ -189,11 +188,23 @@ void CNonymizer::processDir(fs::path dir)
 
 void CNonymizer::processFile(fs::path infile)
 {
+	//Get Input and Output file
 	fs::path sub = infile.relative_path();
 	fs::path out = output;
 	fs::path::iterator iSub = sub.begin();
-	++iSub;
 
+	//Forget the "user given" part
+	fs::path t = target.relative_path();
+	t = t.remove_filename();
+	fs::path::iterator iTarget = t.begin();
+	int targetLength = 0;
+
+	for( ; iTarget != t.end() ; ++iTarget)
+	{
+		++iSub;
+	}
+
+	//Append subdir and filename to the outfile for recursive directory processing
 	if(iSub != sub.end())
 	{
 		for( ; iSub != sub.end() ; ++iSub)
@@ -206,7 +217,7 @@ void CNonymizer::processFile(fs::path infile)
 		out/=sub;
 	}
 
-	std::cout<<out.string()<<std::endl;
+	std::cout<<"OUTPUT: "<<out.string()<<std::endl;
 	std::ofstream anonFile(out.c_str());
 
 	if(!anonFile.good())
@@ -219,7 +230,7 @@ void CNonymizer::processFile(fs::path infile)
 	std::string *in = new std::string;
 	Line *anon = 0;
 
-	std::cout<<infile.string()<<std::endl;
+	std::cout<<"INPUT: "<<infile.string()<<std::endl;
 
 	unsigned long count = 0;
 	while(file.good())
